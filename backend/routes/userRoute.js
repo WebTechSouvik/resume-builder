@@ -4,7 +4,9 @@ import {
 	loggoutController,
 	registerController,
 	getUserDetailsController,
-    updateUserDetalisController,
+	updateUserDetalisController,
+    getAllTemplateFromCollection,
+    addTemplateToCollection,
 } from "../controller/userController.js";
 import authMiddleware from "../middlelware/authMiddleware.js";
 
@@ -14,11 +16,17 @@ router.route("/register").post(registerController);
 
 router.route("/loggin").post(logginController);
 
-router.use(authMiddleware)
+router.use(authMiddleware);
 
-router.route("/details").get(getUserDetailsController).patch(updateUserDetalisController);
+router
+	.route("/details")
+	.get(getUserDetailsController)
+	.patch(updateUserDetalisController);
 
-router.route("/loggout").post(loggoutController)
+router.route("/loggout").post(loggoutController);
 
+router.route("/template").get(getAllTemplateFromCollection)
+
+router.route("/template/:Id").put(addTemplateToCollection)
 
 export default router;

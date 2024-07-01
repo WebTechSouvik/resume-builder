@@ -4,6 +4,11 @@ import ApiError from "../utlis/customError.js";
 import ApiResponse from "../utlis/ApiResponse.js";
 import generateToken from "../utlis/generateToken.js";
 
+
+
+
+//register controller
+
 export const registerController = AsyncHandeler(async (req, res) => {
 	const { email, password } = req.body;
 	if (!email && !password) {
@@ -26,6 +31,10 @@ export const registerController = AsyncHandeler(async (req, res) => {
 
 	res.status(201).json(new ApiResponse("User register sucessfully"));
 });
+
+
+
+//loggin controller
 
 export const logginController = AsyncHandeler(async (req, res) => {
 	const { email, password } = req.body;
@@ -56,27 +65,51 @@ export const logginController = AsyncHandeler(async (req, res) => {
 		.json(new ApiResponse("loggin sucessfull"));
 });
 
+//getting user details controller
 export const getUserDetailsController = AsyncHandeler(async (req, res) => {
 	const id = req.user;
 	const userInfo = await User.findById(id).select(["user_info"]);
 
-	res.status(200).json(new ApiResponse("user info fetch sucessfull","uesData", userInfo));
+	res
+		.status(200)
+		.json(new ApiResponse("user info fetch sucessfull", "uesData", userInfo));
 });
+
+
+
+
+// updatting user deatils controller
 
 export const updateUserDetalisController = AsyncHandeler(async (req, res) => {
 	const id = req.user;
-	console.log(req.body);
 
-	const user = await User.findByIdAndUpdate(
+	const updatedInfo = {};
+
+	Object.keys(req.body).forEach((key) => {
+		updatedInfo[`user_info.${key}`] = req.body[key];
+	});
+	console.log(updatedInfo);
+
+	const updateUser = await User.findByIdAndUpdate(
 		id,
-		{ $set: { user_info: { ...req.body } } },
+		{ $set: updatedInfo },
 		{ new: true, select: "-password -templateCollection" },
 	);
 
 	res
 		.status(201)
-		.json(new ApiResponse("user information updated sucessfully", "uesrInfo",user));
+		.json(
+			new ApiResponse(
+				"user information updated sucessfully",
+				"uesrInfo",
+				updateUser,
+			),
+		);
 });
+
+
+
+//loggout controller
 
 export const loggoutController = AsyncHandeler(async (req, res) => {
 	const options = {
@@ -88,4 +121,53 @@ export const loggoutController = AsyncHandeler(async (req, res) => {
 		.status(200)
 		.clearCookie("Token", options)
 		.json(new ApiResponse("loggout sucessfull"));
+});
+
+
+// template add to user collection controller
+
+export const addTemplateToCollection = AsyncHandeler(async (req, res) => {
+	const { Id } = req.params;
+
+	if (!Id) {
+		throw new ApiError(400,"template Id is requried");
+	}
+
+	const user = await User.findById(req.user);
+
+	if (!user) {
+		throw new ApiError(400,"user dose not exists");
+	}
+
+	const ispresent = user.templateCollection.some(
+		(templateId) => templateId == Id,
+	);
+
+	if (ispresent) {
+		throw new ApiError(400,"template is already present");
+	}
+	user.templateCollection.push(Id);
+
+	await user.save();
+
+	res.status(200).json(new ApiResponse("Template added to collection"));
+});
+
+
+
+//getting all template from user collection controller
+
+export const getAllTemplateFromCollection = AsyncHandeler(async (req, res) => {
+	const userAllTemplate = await User.findById(req.user)
+		.populate({ path: "templateCollection" ,select:["name","image_url","like_by_people"]})
+		.select("templateCollection");
+
+
+	res
+		.status(200)
+		.json(
+			new ApiResponse("all template fetch from collection sucessfull",
+			"templates",
+			userAllTemplate)
+		);
 });

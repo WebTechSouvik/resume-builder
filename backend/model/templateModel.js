@@ -4,12 +4,12 @@ import mongoose from "mongoose";
 const templateSchema=new mongoose.Schema({
 	name:{
 		type:String,
-		unique:[true,"email already exists"],
-		required:[true,"email is required"]
+		unique:[true,"name already exists"],
+		required:[true,"name is required"]
 	},
 	image_url:{
 		type:String,
-		required:[true,"email is required"]
+		required:[true,"image_url is required"]
 	},
 	like_by_people:{
 		type:Number,
