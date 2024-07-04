@@ -11,11 +11,12 @@ import {
 import Home from "./pages/HomePage.jsx";
 import RegisterPage from "./pages/userPage/RegisterPage.jsx";
 import LogginPage from "./pages/userPage/LogginPage.jsx";
+import UserDeatlisPage from "./pages/userPage/UserDeatilsPage.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
-      <Route path="" element={<Home />} />
+      <Route path="" element={<UserDeatlisPage />} />
       <Route path="register" element={<RegisterPage />} />
       <Route path="loggin" element={<LogginPage />} />
     </Route>,

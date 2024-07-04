@@ -1,17 +1,47 @@
-
-@import url('https://fonts.googleapis.com/css2?family=Mooli&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Mooli&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-*{
+* {
 	padding: 0px;
 	margin: 0px;
 	box-sizing: border-box;
-
-
 }
-body{
-	font-family: "Mooli", sans-serif;;
+body {
+	font-family: "Mooli", sans-serif;
+	min-height: 100vh;
+}
+
+.clip-your-needfull-style{
+clip-path: polygon(0 0, 100% 0, 100% 50%, 0 27%);
+}
+
+@layer utilities {
+	.tootip-arrow:after {
+		content: "";
+		border-width: 7px 0px 7px 11px;
+		border-color: transparent transparent transparent white;
+		position: absolute;
+		right: -10px;
+		top: 8px;
+	}
+	
+}
+
+@layer utilities {
+	.profile-input{
+		background-color: transparent;
+		border-bottom: 1px solid #00c8aa ;
+		width: 250px;
+
+	}
+	
+	}
+
+	@layer utilities {
+	.profile-input:focus{
+		outline: none;
+	}
 }
