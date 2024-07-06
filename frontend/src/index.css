@@ -13,7 +13,10 @@ body {
 	font-family: "Mooli", sans-serif;
 	min-height: 100vh;
 }
-
+@page {
+  size: A4;
+  margin: 20mm;
+}
 .clip-your-needfull-style{
 clip-path: polygon(0 0, 100% 0, 100% 50%, 0 27%);
 }
