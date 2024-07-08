@@ -12,7 +12,10 @@ const resumeSchema = new mongoose.Schema(
 		},
 		resume_info: {
 			personal_info: {
-				fullname: {
+				firstname: {
+					type: String,
+				},
+				lastname: {
 					type: String,
 				},
 				email: {
@@ -23,6 +26,9 @@ const resumeSchema = new mongoose.Schema(
 				},
 				education_specalization: {
 					type: String,
+				},
+				job_title:{
+					type:String
 				},
 				bio: {
 					type: String,

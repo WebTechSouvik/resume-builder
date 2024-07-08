@@ -13,6 +13,10 @@ import RegisterPage from "./pages/userPage/RegisterPage.jsx";
 import LogginPage from "./pages/userPage/LogginPage.jsx";
 import UserDeatlisPage from "./pages/userPage/UserDeatilsPage.jsx";
 import CreateResumePage from "./pages/CreateResumePage.jsx";
+import PersonalDetails from "./components/formSection/PersonalDetails.jsx";
+import Experience from "./components/formSection/Experience.jsx";
+import Education from "./components/formSection/Education.jsx";
+import Skill from "./components/formSection/Skill.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -20,7 +24,12 @@ const router = createBrowserRouter(
       <Route path="" element={<UserDeatlisPage />} />
       <Route path="register" element={<RegisterPage />} />
       <Route path="loggin" element={<LogginPage />} />
-      <Route path="createresume" element={<CreateResumePage/>}/>
+      <Route path="createresume" element={<CreateResumePage />}>
+        <Route path="personal-detalis" element={<PersonalDetails />} />
+        <Route path="experience" element={<Experience />} />
+        <Route path="education" element={<Education />} />
+        <Route path="skill" element={<Skill />} />
+      </Route>
     </Route>,
   ),
 );

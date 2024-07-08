@@ -12,6 +12,8 @@
 body {
 	font-family: "Mooli", sans-serif;
 	min-height: 100vh;
+	max-width: 100vw;
+
 }
 @page {
   size: A4;
@@ -47,4 +49,18 @@ clip-path: polygon(0 0, 100% 0, 100% 50%, 0 27%);
 	.profile-input:focus{
 		outline: none;
 	}
+}
+
+@layer utilities {
+	.form-button{
+		display: flex;
+	align-items: center;
+	border: 1px solid #E0E0E0;
+	padding: 0 8px;
+	gap: 8px;
+	border-radius: 8px;
+
+	}
+	
+
 }

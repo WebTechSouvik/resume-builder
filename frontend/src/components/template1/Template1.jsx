@@ -7,7 +7,7 @@ import "./template1.css"
 
 const Template1 = () => {
 	return (
-		<div className="grid grid-cols-6 A4 border-2 border-black ">
+		<div className="grid grid-cols-6 A4 shadow-2xl">
 			<div className="col-span-2 min-h-full bg-gray-500">
 				<div className="w-full h-[230px] ">
 					<img
@@ -62,7 +62,7 @@ const Template1 = () => {
 				</div>
 				<div className="mt-7">
 					<h1 className="w-full font-bold border-b-[1px] border-black pb-2">SOFTWARE SKILL</h1>
-					<div className="mt-5 flex flex-wrap gap-4 ml-20">
+					<div className="mt-5 flex flex-wrap gap-y-5 gap-x-10 ml-[132px]">
 						<Skill/>
 						<Skill/>
 						<Skill/>

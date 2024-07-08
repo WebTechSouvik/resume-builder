@@ -9,11 +9,11 @@ div[size="A4"][layout="portrait"] {
 /*}*/
 .A4 {
 	width: 21cm;
-	height: 1122px;
+	height: 29.7cm;
 	/* width: 29.7cm; */
 	/* height: 21cm; */
 	transform: scale(0.7);
 	position: relative;
-	top: -152px;
+	top: -115px;
 	left: -46px;
 }
