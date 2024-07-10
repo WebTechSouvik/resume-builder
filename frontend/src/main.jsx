@@ -17,6 +17,7 @@ import PersonalDetails from "./components/formSection/PersonalDetails.jsx";
 import Experience from "./components/formSection/Experience.jsx";
 import Education from "./components/formSection/Education.jsx";
 import Skill from "./components/formSection/Skill.jsx";
+import AddNewSection from "./components/formSection/AddNewSection.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -29,6 +30,7 @@ const router = createBrowserRouter(
         <Route path="experience" element={<Experience />} />
         <Route path="education" element={<Education />} />
         <Route path="skill" element={<Skill />} />
+        <Route path="add-section" element={<AddNewSection/>}/>
       </Route>
     </Route>,
   ),

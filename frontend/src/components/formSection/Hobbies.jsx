@@ -1,40 +1,39 @@
-import { useState } from "react";
-import { Rating } from "@smastrom/react-rating";
+import {useState} from 'react'
 import { IoMdAddCircleOutline } from "react-icons/io";
+const Hobbies=()=>{
+const [hobbie, setHobbie] = useState("");
+	const [hobbieList, setHobbieList] = useState([hobbie]);
 
+	const addHobbie=()=>{
+	setHobbie("")
 
-import "@smastrom/react-rating/style.css";
-
-const Skill = () => {
-	const [skill, setSkill] = useState({ name: "", rating: "" });
-	const [skillList, setSkillList] = useState([skill]);
-
-const addSkill=()=>{
-	setSkill({ name: "", rating: "" })
-
-	setSkillList([...skillList,{ name: "", rating: "" }])
+	setHobbieList([...hobbieList,""])
 }
+
 
 	return (
 		<form className="">
 			<div className="space-y-12">
-				<div className=" shadow-xl border-t-4 border-t-[#00c8aa] border-[1px] border-x-gray-300 border-b-gray-300 p-6  rounded-lg">
+				<div className=" border-dotted border-[1px] border-gray-500 p-6  rounded-lg">
 					<h2 className="text-base font-semibold leading-7 text-gray-900 text-center">
-						Skill
+						Hobbie
 					</h2>
-					{skillList.map(() => (
-						<div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 border-[1px] border-gray-300 p-4 rounded-md">
-							<div className="sm:col-span-2">
+					{hobbieList.map((_,i) => (
+						<div className="mt-4 grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-6">
+						<span className="col-span-full font-semibold">
+								#Hobbie {i + 1}
+							</span>
+							<div className="sm:col-span-full">
 								<label
 									htmlFor="first-name"
 									className="block text-sm font-medium leading-6 text-gray-900"
 								>
-									Skill Name
+									Hobbie name
 								</label>
-								<div className="mt-2">
+								<div className="mt-1">
 									<input
 										id="first-name"
-										name="degree_name"
+										name="language_name"
 										type="text"
 										autoComplete="given-name"
 										className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -42,13 +41,7 @@ const addSkill=()=>{
 								</div>
 							</div>
 
-							<div className="col-span-4 self-center place-self-end">
-								<Rating
-									style={{ maxWidth: 160 }}
-									value={skill.rating?skill.rating:0}
-									onChange={(val)=>setSkill((prev)=>({...prev,rating:val}))}
-								/>
-							</div>
+						
 						</div>
 					))}
 				</div>
@@ -58,10 +51,10 @@ const addSkill=()=>{
 				<button
 					type="button"
 					className="text-sm font-semibold leading-6 text-[#1f262e] flex items-center gap-1"
-					onClick={addSkill}
+					onClick={addHobbie}
 				>
 					<IoMdAddCircleOutline size={20} />
-					Add more skill
+					Add more hobbie
 				</button>
 
 				<button
@@ -71,8 +64,7 @@ const addSkill=()=>{
 					Save
 				</button>
 			</div>
-		</form>
-	);
-};
+		</form>)
+}
 
-export default Skill;
+export default Hobbies

@@ -27,8 +27,8 @@ const resumeSchema = new mongoose.Schema(
 				education_specalization: {
 					type: String,
 				},
-				job_title:{
-					type:String
+				job_title: {
+					type: String,
 				},
 				bio: {
 					type: String,
@@ -94,7 +94,12 @@ const resumeSchema = new mongoose.Schema(
 			],
 			skills: [
 				{
-					type: String,
+					name: {
+						type: String,
+					},
+					rating: {
+						type: String,
+					},
 				},
 			],
 			experince: [
@@ -156,10 +161,15 @@ const resumeSchema = new mongoose.Schema(
 					},
 				},
 			],
-
+			achievement: { type: String },
 			languages: [
 				{
-					type: String,
+					language_name: {
+						type: String,
+					},
+					proficiancy: {
+						type: String,
+					},
 				},
 			],
 		},

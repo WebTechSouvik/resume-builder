@@ -2,46 +2,46 @@ import { useState } from "react";
 import { IoMdAddCircleOutline } from "react-icons/io";
 
 const formFeild = {
-	degree_name: "",
-	college_name: "",
+	certificate_name: "",
+	issuing_org: "",
 	starting_date: "",
 	ending_date: "",
-	marks_CGPA: "",
-	marks_percentage: "",
 };
 
-const Education = () => {
-	const [educationList, setEducationList]=useState([formFeild])
+const Certificate = () => {
+	const [certificateList, setCertificateList] = useState([formFeild]);
 
+	const addCertificate = () => {
+		for (let key in formFeild) {
+			formFeild[key] = "";
+		}
 
-const addEducation=()=>{
-	for(let key in formFeild){
-		formFeild[key]=""
-	}
-
-	setEducationList([...educationList,formFeild])
-}
+		setCertificateList([...certificateList, formFeild]);
+	};
 
 	return (
 		<form className="">
 			<div className="space-y-12">
-				<div className=" shadow-xl border-t-4 border-t-[#00c8aa] border-[1px] border-x-gray-300 border-b-gray-300 p-6  rounded-lg">
+				<div className=" border-dotted border-[1px] border-gray-500 p-6  rounded-lg">
 					<h2 className="text-base font-semibold leading-7 text-gray-900 text-center">
-						Education
+						Certificate
 					</h2>
-					{educationList.map(() => (
+					{certificateList.map((_,i) => (
 						<div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+						<span className="col-span-full font-semibold">
+								#Certificate {i + 1}
+							</span>
 							<div className="sm:col-span-full">
 								<label
 									htmlFor="first-name"
 									className="block text-sm font-medium leading-6 text-gray-900"
 								>
-								Degree
+									Certificate name
 								</label>
 								<div className="mt-2">
 									<input
 										id="first-name"
-										name="degree_name"
+										name="certificate_name"
 										type="text"
 										autoComplete="given-name"
 										className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -54,12 +54,12 @@ const addEducation=()=>{
 									htmlFor="last-name"
 									className="block text-sm font-medium leading-6 text-gray-900"
 								>
-									Institute name
+									Organization name
 								</label>
 								<div className="mt-2">
 									<input
 										id="last-name"
-										name="college_name"
+										name="issuing_org"
 										type="text"
 										autoComplete="family-name"
 										className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -101,8 +101,6 @@ const addEducation=()=>{
 									/>
 								</div>
 							</div>
-
-						
 						</div>
 					))}
 				</div>
@@ -112,10 +110,10 @@ const addEducation=()=>{
 				<button
 					type="button"
 					className="text-sm font-semibold leading-6 text-[#1f262e] flex items-center gap-1"
-					onClick={addEducation}
+					onClick={addCertificate}
 				>
 					<IoMdAddCircleOutline size={20} />
-					Add more education
+					Add more certificate
 				</button>
 
 				<button
@@ -129,4 +127,4 @@ const addEducation=()=>{
 	);
 };
 
-export default Education;
+export default Certificate;

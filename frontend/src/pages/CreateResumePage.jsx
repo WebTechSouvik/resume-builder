@@ -21,6 +21,9 @@ function CreateResumePage() {
 				break;
 			case 4:
 				navigate("/createresume/skill");
+				break;
+			case 5:
+				navigate("/createresume/add-section");
 		}
 	}, [activeFrom]);
 
@@ -45,12 +48,12 @@ function CreateResumePage() {
 								Previous
 							</button>
 						)}
-						{activeFrom < 4 && (
+						{activeFrom < 5 && (
 							<button
 								className="form-button bg-[#1f262e] text-white"
 								onClick={() =>
 									setActiveForm((prev) =>
-										prev <= 3 ? prev + 1 : prev,
+										prev <= 4 ? prev + 1 : prev,
 									)
 								}
 							>
