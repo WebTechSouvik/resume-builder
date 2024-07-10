@@ -2,11 +2,21 @@ import Template1 from "../components/template1/Template1";
 import { LuLayoutGrid } from "react-icons/lu";
 import { FaArrowRightLong, FaArrowLeftLong } from "react-icons/fa6";
 import { Outlet, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState,createContext } from "react";
+import { resumeInfoObj } from "../constant";
+import { resumeContext } from "../context/resumeContext";
 
 function CreateResumePage() {
+	const [resumeInfo, setResumeInfo]=useState(resumeInfoObj)
 	const [activeFrom, setActiveForm] = useState(1);
 	const navigate = useNavigate();
+	
+useEffect(()=>{
+	if(localStorage.getItem("resumeInfo")){
+		setResumeInfo(JSON.parse(localStorage.getItem("resumeInfo")))
+	}
+
+},[])
 
 	useEffect(() => {
 		switch (activeFrom) {
@@ -28,6 +38,7 @@ function CreateResumePage() {
 	}, [activeFrom]);
 
 	return (
+		<resumeContext.Provider value={{resumeInfo,setResumeInfo}}>
 		<main className="max-w-screen grid grid-cols-2 pt-4">
 			<section className="px-8">
 				<div className="flex w-full justify-between mb-10">
@@ -70,6 +81,7 @@ function CreateResumePage() {
 				<Template1 />
 			</section>
 		</main>
+		</resumeContext.Provider>
 	);
 }
 

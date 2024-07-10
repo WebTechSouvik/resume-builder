@@ -30,22 +30,51 @@ export const initialTags = [
 export const section = [
   {
     name: "Project",
-    component: <Project/>,
+    component: <Project />,
   },
+
   {
     name: "Certifiacte",
-    component: <Certificate/>,
+    component: <Certificate />,
   },
   {
     name: "Language",
-    component: <Language/>,
+    component: <Language />,
   },
   {
     name: "Hobbies",
-    component: <Hobbies/>,
+    component: <Hobbies />,
   },
   {
     name: "Achievement",
-    component: <Achievement/>,
+    component: <Achievement />,
   },
 ];
+
+export const resumeInfoObj = {
+  personal_info: {
+    firstname: "",
+    lastname: "",
+    email: "",
+    contact_no: "",
+    education_specalization: "",
+    job_title: "",
+    bio: "",
+    address: "",
+    img_url: "",
+  },
+  scocial_media_link: {
+    linkdin: "",
+    github: "",
+    portFolio: "",
+  },
+  education: [],
+  project: [],
+  skills: [],
+  experince: [],
+  hobbies: [],
+  certificates: [],
+  training: [],
+  achievement: "",
+  languages: [],
+};

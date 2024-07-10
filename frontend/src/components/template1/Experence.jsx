@@ -1,15 +1,20 @@
-const Experence = () => {
+const Experence = ({
+	job_tittle,
+	comapny_name,
+	joining_date,
+	leaving_date,
+	job_type,
+	description_of_job_role,
+}) => {
 	return (
 		<div className="grid grid-cols-4 mt-5 text-[12px]">
-			<div className="col-span-1 ">2012-2014</div>
+			<div className="col-span-1 ">
+				<span>{joining_date.split('-')[0]}</span> - <span>{leaving_date.split('-')[0]}</span>
+			</div>
 			<div className="col-span-3 ml-4 ">
-				<h1>job position here</h1>
-				<p>company Name /California USA</p>
-				<p className="mt-3">
-					As you consider all the possible ways to improve yourself
-					and the world, you notice John Travolta seems fairly
-					unhappy. There have been days{" "}
-				</p>
+				<h1 className="uppercase">{job_tittle}</h1>
+				<p>{comapny_name}</p>
+				<p className="mt-3">{description_of_job_role}</p>
 			</div>
 		</div>
 	);

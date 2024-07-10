@@ -1,9 +1,20 @@
-const Education=()=>{
-	return <div className="flex flex-col items-start ml-2 mt-3">
-		<p className="text-[14px] text-white">Enter your major</p>
-		<p className="text-[10px] text-white">name of your universcity</p>
-		<p className="text-[10px] text-white">2005-2009</p>
-	</div>
-}
+const Education = ({
+	degree_name,
+	college_name,
+	starting_date,
+	ending_date,
+	marks_CGPA,
+	marks_percentage,
+}) => {
+	return (
+		<div className="flex flex-col items-start ml-2 mt-3">
+			<p className="text-[14px] text-white">{degree_name}</p>
+			<p className="text-[10px] text-white">{college_name}</p>
+			<p className="text-[10px] text-white">
+					<span>{starting_date.split('-')[0]}</span> - <span>{ending_date.split('-')[0]}</span>
+			</p>
+		</div>
+	);
+};
 
-export default Education
+export default Education;
