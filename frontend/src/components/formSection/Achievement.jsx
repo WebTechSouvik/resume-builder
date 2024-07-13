@@ -16,10 +16,34 @@ import {
 	HtmlButton,
 	Separator,
 } from "react-simple-wysiwyg";
+import { resumeContext } from "../../context/resumeContext";
+import { useEffect, useState, useContext } from "react";
 
 const Achievement=()=>{
+	const { resumeInfo, setResumeInfo } = useContext(resumeContext);
+
+const handelChange=(e)=>{
+
+	setResumeInfo({...resumeInfo,achievement:e.target.value})
+
+}
+	const handelSubmit = (e) => {
+		e.preventDefault();
+		localStorage.setItem("resumeInfo", JSON.stringify(resumeInfo));
+	};
+
+
+	useEffect(() => {
+		if (localStorage.getItem("resumeInfo") && JSON.parse(localStorage.getItem("resumeInfo")).achievement) {
+
+		setResumeInfo({...resumeInfo,achievement:JSON.parse(localStorage.getItem("resumeInfo")).achievement})
+
+		
+		}
+	}, []);
+
 	return (
-		<form className="">
+		<form className="" onSubmit={handelSubmit}>
 			<div className="space-y-12">
 				<div className="border-dotted border-[1px] border-gray-500 p-6 rounded-md  ">
 					<h2 className="text-base font-semibold leading-7 text-gray-900 text-center">
@@ -38,7 +62,7 @@ const Achievement=()=>{
 								</label>
 								<div className="mt-2">
 									<EditorProvider>
-										<Editor>
+										<Editor value={resumeInfo.achievement} onChange={handelChange}>
 											<Toolbar>
 												<BtnBold />
 												<BtnItalic />

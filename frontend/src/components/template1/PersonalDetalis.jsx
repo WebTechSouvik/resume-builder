@@ -5,7 +5,7 @@ const PersonalDetalis = ({name,value}) => {
 				<div className="w-1/4 bg-yellow-400 h-full "></div>
 				<span className="text-[12px] text-white">{name}</span>
 			</div>
-			<span className="text-[12px] text-white mt-1 break-words">{value}</span>
+			<span className="text-[12px] text-white mt-2 break-words pl-16 pr-2 w-full block">{value}</span>
 		</>
 	);
 };

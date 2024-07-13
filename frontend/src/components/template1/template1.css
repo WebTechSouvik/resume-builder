@@ -13,7 +13,8 @@ div[size="A4"][layout="portrait"] {
 	/* width: 29.7cm; */
 	/* height: 21cm; */
 	transform: scale(0.7);
-	position: relative;
-	top: -115px;
+	position: absolute;
+
 	left: -46px;
+	page-break-after: always;
 }

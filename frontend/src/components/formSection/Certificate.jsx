@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState,useEffect,useContext } from "react";
 import { IoMdAddCircleOutline } from "react-icons/io";
+import { resumeContext } from "../../context/resumeContext";
 
 const formFeild = {
 	certificate_name: "",
@@ -10,6 +11,7 @@ const formFeild = {
 
 const Certificate = () => {
 	const [certificateList, setCertificateList] = useState([formFeild]);
+	const { resumeInfo, setResumeInfo } = useContext(resumeContext);
 
 	const addCertificate = () => {
 		for (let key in formFeild) {
@@ -19,14 +21,46 @@ const Certificate = () => {
 		setCertificateList([...certificateList, formFeild]);
 	};
 
+	const handelChange = (e) => {
+		const { dataset, name, value } = e.target;
+		const newList = certificateList.map((exp, i) => {
+			if (dataset.key == i) {
+				return { ...exp, [name]: value };
+			}
+			return exp;
+		});
+		setCertificateList(newList);
+	};
+
+
+	const handelSubmit = (e) => {
+		e.preventDefault();
+		localStorage.setItem("resumeInfo", JSON.stringify(resumeInfo));
+	};
+
+
+	useEffect(() => {
+		setResumeInfo({ ...resumeInfo, certificates: certificateList });
+	}, [certificateList]);
+	
+
+	useEffect(() => {
+		if (localStorage.getItem("resumeInfo") && JSON.parse(localStorage.getItem("resumeInfo")).certificates.length>0) {
+			setCertificateList(
+				JSON.parse(localStorage.getItem("resumeInfo")).certificates,
+			);
+		}
+	}, []);
+	
+
 	return (
-		<form className="">
+		<form className="" onSubmit={handelSubmit}>
 			<div className="space-y-12">
-				<div className=" border-dotted border-[1px] border-gray-500 p-6  rounded-lg">
+				<div className=" border-dotted border-[1px] border-gray-500 p-6  rounded-lg" onChange={handelChange}>
 					<h2 className="text-base font-semibold leading-7 text-gray-900 text-center">
 						Certificate
 					</h2>
-					{certificateList.map((_,i) => (
+					{certificateList.map((certificate,i) => (
 						<div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
 						<span className="col-span-full font-semibold">
 								#Certificate {i + 1}
@@ -40,9 +74,11 @@ const Certificate = () => {
 								</label>
 								<div className="mt-2">
 									<input
+									data-key={i}
 										id="first-name"
 										name="certificate_name"
 										type="text"
+										value={certificate.certificate_name}
 										autoComplete="given-name"
 										className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
 									/>
@@ -58,9 +94,11 @@ const Certificate = () => {
 								</label>
 								<div className="mt-2">
 									<input
+									data-key={i}
 										id="last-name"
 										name="issuing_org"
 										type="text"
+										value={certificate.issuing_org}
 										autoComplete="family-name"
 										className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
 									/>
@@ -76,9 +114,11 @@ const Certificate = () => {
 								</label>
 								<div className="mt-2">
 									<input
+									data-key={i}
 										id="email"
 										name="starting_date"
 										type="date"
+										value={certificate.starting_date}
 										autoComplete="email"
 										className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
 									/>
@@ -93,9 +133,11 @@ const Certificate = () => {
 								</label>
 								<div className="mt-2">
 									<input
+									data-key={i}
 										id="first-name"
 										name="ending_date"
 										type="date"
+										value={certificate.ending_date}
 										autoComplete="given-name"
 										className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
 									/>

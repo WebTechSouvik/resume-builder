@@ -1,27 +1,57 @@
-import {useState} from "react"
+import { useEffect, useState, useContext } from "react";
 import { IoMdAddCircleOutline } from "react-icons/io";
+import { resumeContext } from "../../context/resumeContext";
 
-const Language=()=>{
-	const [language, setLanguage] = useState({ language_name: "", proficiancy: "" });
-	const [languageList, setLanguageList] = useState([language]);
+const Language = () => {
+	const [languageList, setLanguageList] = useState([
+		{ language_name: "", proficiancy: "" },
+	]);
+	const { resumeInfo, setResumeInfo } = useContext(resumeContext);
 
-	const addLanguage=()=>{
-	setLanguage({ language_name: "", proficiancy: "" })
+	const addLanguage = () => {
+		setLanguageList([...languageList, { name: "", rating: "" }]);
+	};
+	const handelChange = (e) => {
+		const { dataset, name, value } = e.target;
+		const newList = languageList.map((exp, i) => {
+			if (dataset.key == i) {
+				return { ...exp, [name]: value };
+			}
+			return exp;
+		});
+		setLanguageList(newList);
+	};
 
-	setLanguageList([...languageList,{ name: "", rating: "" }])
-}
+	const handelSubmit = (e) => {
+		e.preventDefault();
+		localStorage.setItem("resumeInfo", JSON.stringify(resumeInfo));
+	};
 
+	useEffect(() => {
+		setResumeInfo({ ...resumeInfo, languages: languageList });
+	}, [languageList]);
+
+	useEffect(() => {
+		if (
+			localStorage.getItem("resumeInfo") &&
+			JSON.parse(localStorage.getItem("resumeInfo")).languages.length > 0
+		) {
+			setLanguageList(
+				JSON.parse(localStorage.getItem("resumeInfo")).languages,
+			);
+		}
+	}, []);
 
 	return (
-		<form className="">
+		<form className="" onSubmit={handelSubmit}>
 			<div className="space-y-12">
-				<div className=" border-dotted border-[1px] border-gray-500 p-6  rounded-lg">
+				<div className=" border-dotted border-[1px] border-gray-500 p-6  rounded-lg" onChange={handelChange}>
 					<h2 className="text-base font-semibold leading-7 text-gray-900 text-center">
 						Language
 					</h2>
-					{languageList.map((_,i) => (
+					{languageList.map((lang, i) => (
 						<div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-						<span className="col-span-full font-semibold">
+							<span className="col-span-full font-semibold">
 								#Language {i + 1}
 							</span>
 							<div className="sm:col-span-full">
@@ -33,9 +63,11 @@ const Language=()=>{
 								</label>
 								<div className="mt-2">
 									<input
+									data-key={i}
 										id="first-name"
 										name="language_name"
 										type="text"
+										value={lang.language_name}
 										autoComplete="given-name"
 										className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
 									/>
@@ -50,12 +82,27 @@ const Language=()=>{
 									Proficiency
 								</label>
 								<div className="mt-2">
-									<select name="proficiancy" id="" className="py-[10px] block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
-										<option value="Elementary proficiency">Elementary proficiency</option>
-										<option value="Limited working proficiency">Limited working proficiency </option>
-										<option value="Professional working proficiency">Professional working proficiency</option>
-										<option value="Full Professional proficiency">Full Professional proficiency</option>
-										<option value="Native or Bilingual proficiency">Native or Bilingual proficiency</option>
+									<select
+									data-key={i}
+										name="proficiancy"
+										id=""
+										className="py-[10px] block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+									>
+										<option value="Elementary proficiency">
+											Elementary proficiency
+										</option>
+										<option value="Limited working proficiency">
+											Limited working proficiency{" "}
+										</option>
+										<option value="Professional working proficiency">
+											Professional working proficiency
+										</option>
+										<option value="Full Professional proficiency">
+											Full Professional proficiency
+										</option>
+										<option value="Native or Bilingual proficiency">
+											Native or Bilingual proficiency
+										</option>
 									</select>
 								</div>
 							</div>
@@ -81,7 +128,8 @@ const Language=()=>{
 					Save
 				</button>
 			</div>
-		</form>)
-}
+		</form>
+	);
+};
 
-export default Language
+export default Language;

@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect, useContext } from "react";
 import { IoMdAddCircleOutline } from "react-icons/io";
+import { resumeContext } from "../../context/resumeContext";
 import {
 	BtnBold,
 	BtnItalic,
@@ -23,13 +24,12 @@ const formField = {
 	project_name: "",
 	starting_date: "",
 	ending_date: "",
-
 	description: "",
 };
 
 const Project = () => {
-	const [project, setProject] = useState(formField);
-	const [projectList, setProjectList] = useState([1]);
+	const [projectList, setProjectList] = useState([formField]);
+	const { resumeInfo, setResumeInfo } = useContext(resumeContext);
 
 	const addproject = () => {
 		for (let key in formField) {
@@ -38,15 +38,61 @@ const Project = () => {
 		setProjectList([...projectList, formField]);
 	};
 
+	const handleInputChange = (e) => {
+		const { dataset, name, value } = e.target;
+
+		const newList = projectList.map((proj, i) => {
+			if (dataset.key == i) {
+				return { ...proj, [name]: value };
+			}
+			return proj;
+		});
+
+		setProjectList(newList);
+	};
+	const handelEditorChange = (val, current) => {
+		const newList = projectList.map((proj, i) => {
+			if (current == i) {
+				return { ...proj, description: val };
+			}
+			return proj;
+		});
+
+		setProjectList(newList);
+	};
+
+	const handelSubmit = (e) => {
+		e.preventDefault();
+		localStorage.setItem("resumeInfo", JSON.stringify(resumeInfo));
+	};
+
+	useEffect(() => {
+		setResumeInfo({ ...resumeInfo, project: projectList });
+	}, [projectList]);
+
+	useEffect(() => {
+		if (
+			localStorage.getItem("resumeInfo") &&
+			JSON.parse(localStorage.getItem("resumeInfo")).project.length > 0
+		) {
+			setProjectList(
+				JSON.parse(localStorage.getItem("resumeInfo")).project,
+			);
+		}
+	}, []);
+
 	return (
-		<form className="">
+		<form className="" onSubmit={handelSubmit}>
 			<div className="space-y-12">
-				<div className="border-dotted border-[1px] border-gray-500 p-6 rounded-md  ">
+				<div
+					className="border-dotted border-[1px] border-gray-500 p-6 rounded-md"
+					onChange={handleInputChange}
+				>
 					<h2 className="text-base font-semibold leading-7 text-gray-900 text-center">
 						Project details
 					</h2>
 
-					{projectList.map((_, i) => (
+					{projectList.map((proj, i) => (
 						<div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
 							<span className="col-span-full font-semibold">
 								#Project {i + 1}
@@ -60,9 +106,11 @@ const Project = () => {
 								</label>
 								<div className="mt-2">
 									<input
+										data-key={i}
 										id="first-name"
 										name="project_name"
 										type="text"
+										value={proj.project_name}
 										autoComplete="given-name"
 										className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
 									/>
@@ -78,9 +126,11 @@ const Project = () => {
 								</label>
 								<div className="mt-2">
 									<input
+										data-key={i}
 										id="email"
 										name="starting_date"
 										type="date"
+										value={proj.starting_date}
 										autoComplete="email"
 										className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
 									/>
@@ -95,9 +145,11 @@ const Project = () => {
 								</label>
 								<div className="mt-2">
 									<input
+										data-key={i}
 										id="first-name"
 										name="ending_date"
 										type="date"
+										value={proj.ending_date}
 										autoComplete="given-name"
 										className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
 									/>
@@ -113,7 +165,15 @@ const Project = () => {
 								</label>
 								<div className="mt-2">
 									<EditorProvider>
-										<Editor>
+										<Editor
+											value={proj.description}
+											onChange={(e) =>
+												handelEditorChange(
+													e.target.value,
+													i,
+												)
+											}
+										>
 											<Toolbar>
 												<BtnBold />
 												<BtnItalic />

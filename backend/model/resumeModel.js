@@ -94,7 +94,7 @@ const resumeSchema = new mongoose.Schema(
 			],
 			skills: [
 				{
-					name: {
+					skill_name: {
 						type: String,
 					},
 					rating: {
