@@ -1,5 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { resumeContext } from "../../context/resumeContext";
+import { useDispatch } from "react-redux";
+import { updateInfo } from "../../redux/slice/resumeSlice";
 
 const formField = {
 	firstname: "",
@@ -15,7 +17,7 @@ const formField = {
 
 const PersonalDetails = () => {
 	const [personalInfo, setPersonalInfo] = useState(formField);
-	const { resumeInfo, setResumeInfo } = useContext(resumeContext);
+	const dispatch = useDispatch();
 
 	const handelChange = (e) => {
 		const { name, value } = e.target;
@@ -23,24 +25,28 @@ const PersonalDetails = () => {
 		setPersonalInfo({ ...personalInfo, [name]: value });
 	};
 
-	const handelSubmit=(e)=>{
-		e.preventDefault()
-		localStorage.setItem("resumeInfo",JSON.stringify(resumeInfo))
-	}
+	const handelSubmit = (e) => {
+		e.preventDefault();
+		// localStorage.setItem("resumeInfo",JSON.stringify(resumeInfo))
+	};
 
 	useEffect(() => {
-		setResumeInfo({ ...resumeInfo, personal_info: personalInfo });
+		dispatch(
+			updateInfo({ fieldName: "personal_info", value: personalInfo }),
+		);
+		// setResumeInfo({ ...resumeInfo, personal_info: personalInfo });
 	}, [personalInfo]);
 
-useEffect(()=>{
-if(localStorage.getItem("resumeInfo")){
-		setPersonalInfo(JSON.parse(localStorage.getItem("resumeInfo")).personal_info)
-	}
-},[])
-
+	useEffect(() => {
+		if (localStorage.getItem("resumeInfo")) {
+			setPersonalInfo(
+				JSON.parse(localStorage.getItem("resumeInfo")).personal_info,
+			);
+		}
+	}, []);
 
 	return (
-		<form className="" onSubmit={(e)=>handelSubmit(e)}>
+		<form className="" onSubmit={(e) => handelSubmit(e)}>
 			<div className="space-y-12">
 				<div className=" shadow-xl border-t-4 border-t-[#00c8aa] border-[1px] border-x-gray-300 border-b-gray-300 p-6  rounded-lg">
 					<h2 className="text-base font-semibold leading-7 text-gray-900 text-center">

@@ -18,28 +18,32 @@ import {
 } from "react-simple-wysiwyg";
 import { resumeContext } from "../../context/resumeContext";
 import { useEffect, useState, useContext } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { updateInfo } from "../../redux/slice/resumeSlice";
 
 const Achievement=()=>{
-	const { resumeInfo, setResumeInfo } = useContext(resumeContext);
+	 const dispatch=useDispatch()
+	 const{resumeInfo}=useSelector(state=>state.resume)
 
 const handelChange=(e)=>{
 
-	setResumeInfo({...resumeInfo,achievement:e.target.value})
+
+	dispatch(updateInfo({fieldName:"achievement",value:e.target.value}))
 
 }
 	const handelSubmit = (e) => {
 		e.preventDefault();
-		localStorage.setItem("resumeInfo", JSON.stringify(resumeInfo));
+		
 	};
 
 
 	useEffect(() => {
-		if (localStorage.getItem("resumeInfo") && JSON.parse(localStorage.getItem("resumeInfo")).achievement) {
+		// if (localStorage.getItem("resumeInfo") && JSON.parse(localStorage.getItem("resumeInfo")).achievement) {
 
-		setResumeInfo({...resumeInfo,achievement:JSON.parse(localStorage.getItem("resumeInfo")).achievement})
+		// setResumeInfo({...resumeInfo,achievement:JSON.parse(localStorage.getItem("resumeInfo")).achievement})
 
 		
-		}
+		
 	}, []);
 
 	return (

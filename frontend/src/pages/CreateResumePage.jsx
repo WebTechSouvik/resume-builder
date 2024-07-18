@@ -6,7 +6,6 @@ import { useEffect, useState, createContext, useRef } from "react";
 import { resumeInfoObj } from "../constant";
 import { resumeContext } from "../context/resumeContext";
 import Resume from "../components/template1/Resume";
-
 import Reference from "../components/template1/Reference";
 import Experence from "../components/template1/Experence";
 import PersonalDetalis from "../components/template1/PersonalDetalis";
@@ -20,13 +19,15 @@ import { BsFiletypePdf, BsFiletypePng, BsFiletypeJpg } from "react-icons/bs";
 import * as htmlToImage from "html-to-image";
 import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
-import photo from "../assets/photo.jpeg"
+import photo from "../assets/photo.jpeg";
 import ColorSelect from "../components/ColorSelect";
+import { motion } from "framer-motion";
+import ResumeContent from "../components/template1/ResumeContent.jsx";
 
 function CreateResumePage() {
 	const [resumeInfo, setResumeInfo] = useState(resumeInfoObj);
 	const [activeFrom, setActiveForm] = useState(1);
-	const [isTheme, setIstheme]=useState(false)
+	const [isTheme, setIstheme] = useState(false);
 	const navigate = useNavigate();
 	const pngRef = useRef();
 
@@ -34,15 +35,18 @@ function CreateResumePage() {
 		return (
 			<>
 				<div className="col-span-2 min-h-full bg-gray-500">
-				
-						<div className="w-full h-[230px] ">
-							<img
-								className="w-full h-full"
-								src={resumeInfo.personal_info.img_url?resumeInfo.personal_info.img_url:photo}
-								alt=""
-							/>
-						</div>
-					
+					<div className="w-full h-[230px] ">
+						<img
+							className="w-full h-full"
+							src={
+								resumeInfo.personal_info.img_url
+									? resumeInfo.personal_info.img_url
+									: photo
+							}
+							alt=""
+						/>
+					</div>
+
 					{resumeInfo.education.length > 0 && (
 						<div className="pl-7 mt-7">
 							<p className="flex text-[15px] font-bold text-white border-b-[1px] border-b-yellow-400 pb-2">
@@ -194,7 +198,7 @@ function CreateResumePage() {
 		}
 	};
 
-	const generatePdf = async() => {
+	const generatePdf = async () => {
 		const chilDren = pngRef.current.firstChild.childNodes;
 		if (chilDren.length == 0) {
 			return;
@@ -202,7 +206,7 @@ function CreateResumePage() {
 		const doc = new jsPDF({ orientation: "p", unit: "mm" });
 		try {
 			const urlPromise = Array.from(chilDren).map(async (child) => {
-				const canvas = await html2canvas(child,{ scale: 3 });
+				const canvas = await html2canvas(child, { scale: 3 });
 				return canvas.toDataURL("image/png");
 			});
 
@@ -212,8 +216,6 @@ function CreateResumePage() {
 				doc.addImage(url, "PNG", 0, 0, 210, 297);
 			});
 			doc.save("resume.pdf");
-
-						
 		} catch (err) {
 			console.log(err);
 		}
@@ -243,12 +245,16 @@ function CreateResumePage() {
 			<main className="max-w-screen grid grid-cols-2 pt-4">
 				<section className="px-8 relative">
 					<div className="flex w-full justify-between mb-10">
-						<button className="flex gap-2 items-center border-[1px] border-gray-300 h-10 px-2 rounded-lg " onMouseEnter={()=>setIstheme(prev=>!prev)}>
+						<button
+							className="flex gap-2 items-center border-[1px] border-gray-300 h-10 px-2 rounded-lg "
+							onMouseEnter={() => setIstheme((prev) => !prev)}
+						>
 							<LuLayoutGrid /> Theme
 						</button>
 						<div className="flex gap-2 ">
 							{activeFrom > 1 && (
-								<button
+								<motion.button
+									whileTap={{ scale: 0.92 }}
 									className="form-button bg-[#00c8aa]"
 									onClick={() =>
 										setActiveForm((prev) =>
@@ -258,10 +264,11 @@ function CreateResumePage() {
 								>
 									<FaArrowLeftLong />
 									Previous
-								</button>
+								</motion.button>
 							)}
 							{activeFrom < 5 && (
-								<button
+								<motion.button
+									whileTap={{ scale: 0.92 }}
 									className="form-button bg-[#1f262e] text-white"
 									onClick={() =>
 										setActiveForm((prev) =>
@@ -270,11 +277,11 @@ function CreateResumePage() {
 									}
 								>
 									Next <FaArrowRightLong />
-								</button>
+								</motion.button>
 							)}
 						</div>
 					</div>
-					<ColorSelect isTheme={isTheme}/>
+					<ColorSelect isTheme={isTheme} />
 					<Outlet />
 				</section>
 				<section className="">
@@ -287,7 +294,9 @@ function CreateResumePage() {
 						</div>
 					</div>
 					<div ref={pngRef}>
-						<Resume>{content()}</Resume>
+						<Resume>
+						{ResumeContent()}
+						</Resume>
 					</div>
 				</section>
 			</main>
@@ -296,4 +305,3 @@ function CreateResumePage() {
 }
 
 export default CreateResumePage;
-

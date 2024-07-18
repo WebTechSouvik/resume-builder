@@ -1,7 +1,39 @@
+import { useEffect, useRef } from "react";
 import logo from "../../assets/logo.png";
-import {Link} from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import {
+	clearError,
+	clearMessage,
+	userRegisterThunk,
+} from "../../redux/slice/userSlice";
+import { toast } from "sonner";
+import { useForm } from "react-hook-form";
 
 const RegisterPage = () => {
+	const formRef = useRef(null);
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+	const { loading, message, error } = useSelector((state) => state.user);
+	const { handleSubmit, register, formState } = useForm();
+	const { errors } = formState;
+
+	const handleRegister = (data) => {
+		dispatch(userRegisterThunk(data));
+	};
+
+	useEffect(() => {
+		if (message) {
+			toast.success(message);
+			dispatch(clearMessage());
+			navigate("/loggin");
+		}
+		if (error) {
+			toast.error(error);
+			dispatch(clearError());
+		}
+	}, [message, error]);
+
 	return (
 		<div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
 			<div className="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -16,7 +48,38 @@ const RegisterPage = () => {
 			</div>
 
 			<div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-				<form action="#" method="POST" className="space-y-6">
+				<form
+					onSubmit={handleSubmit(handleRegister)}
+					className="space-y-6"
+					ref={formRef}
+				>
+					<div>
+						<label
+							htmlFor="email"
+							className="block text-sm font-bold leading-6 text-[#1f262e]"
+						>
+							Full name
+						</label>
+						<div className="mt-2">
+							<input
+								{...register("fullname", { required: true })}
+								id="email"
+								type="text"
+								autoComplete="email"
+								className="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[#00967e] sm:text-sm sm:leading-6"
+							/>
+						</div>
+						{errors.firstname?.type == "required" && (
+							<p
+								role="alert"
+								className="mt-1 text-red-400 text-sm"
+							>
+								firstname? is required
+							</p>
+						)}
+					</div>
+				
+
 					<div>
 						<label
 							htmlFor="email"
@@ -26,14 +89,21 @@ const RegisterPage = () => {
 						</label>
 						<div className="mt-2">
 							<input
+								{...register("email", { required: true })}
 								id="email"
-								name="email"
 								type="email"
-								required
 								autoComplete="email"
 								className="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[#00967e] sm:text-sm sm:leading-6"
 							/>
 						</div>
+						{errors.email?.type == "required" && (
+							<p
+								role="alert"
+								className="mt-1 text-red-400 text-sm"
+							>
+								email is required
+							</p>
+						)}
 					</div>
 
 					<div>
@@ -47,14 +117,21 @@ const RegisterPage = () => {
 						</div>
 						<div className="mt-2">
 							<input
+								{...register("password", { required: true })}
 								id="password"
-								name="password"
 								type="password"
-								required
 								autoComplete="current-password"
 								className="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[#00967e] sm:text-sm sm:leading-6"
 							/>
 						</div>
+						{errors.password?.type == "required" && (
+							<p
+								role="alert"
+								className="mt-1 text-red-400 text-sm"
+							>
+								password is required
+							</p>
+						)}
 					</div>
 
 					<div>
@@ -70,7 +147,7 @@ const RegisterPage = () => {
 				<p className="mt-10 text-center text-sm text-gray-500">
 					Already have a account?{" "}
 					<Link
-						to='/loggin'
+						to="/loggin"
 						className="font-bold leading-6 text-[#1f262e] hover:text-[#00967e]"
 					>
 						Sign In

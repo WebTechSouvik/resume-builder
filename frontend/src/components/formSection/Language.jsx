@@ -1,16 +1,80 @@
 import { useEffect, useState, useContext } from "react";
 import { IoMdAddCircleOutline } from "react-icons/io";
 import { resumeContext } from "../../context/resumeContext";
+import { motion, AnimatePresence } from "framer-motion";
+import { RiArrowUpDownLine } from "react-icons/ri";
+import { useDispatch } from "react-redux";
+import { updateInfo } from "../../redux/slice/resumeSlice";
+
+
+const themeVariant = {
+	close: {
+		clipPath: "inset(0% 0% 100% 0% )",
+		transition: {
+			type: "spring",
+			bounce: 0,
+			duration: 0.3,
+		},
+	},
+	open: {
+		clipPath: "inset(0% 0% 0% 0% )",
+		transition: {
+			type: "spring",
+			bounce: 0,
+			duration: 0.3,
+		},
+	},
+};
+
+const rotateButtonVarients = {
+	close: {
+		rotate: 0,
+		transition: {
+			duration: 0.3,
+		},
+	},
+	open: {
+		rotate: 180,
+		transition: {
+			duration: 0.3,
+		},
+	},
+};
 
 const Language = () => {
 	const [languageList, setLanguageList] = useState([
-		{ language_name: "", proficiancy: "" },
+		{ language_name: "", proficiancy: "",isOpen:true },
 	]);
-	const { resumeInfo, setResumeInfo } = useContext(resumeContext);
+	 const dispatch=useDispatch()
 
 	const addLanguage = () => {
-		setLanguageList([...languageList, { name: "", rating: "" }]);
+		const newList = languageList.map((lang, index) => {
+			if (index === languageList.length - 1) {
+				return( { ...lang, isOpen:false});
+			}
+			return lang;
+		});
+
+
+		newList.push({ language_name: "", proficiancy: "",isOpen:true});
+
+		setLanguageList(newList);
 	};
+
+const toggleFormView = (e) => {
+	if(e.target.nodeName!=="svg")return
+		const { dataset } = e.target.parentElement;
+		console.log(dataset.key);
+		const newList = languageList.map((lang, i) => {
+			if (i == dataset.key) {
+				return { ...lang, isOpen: !lang.isOpen };
+			}
+			return lang;
+		});
+		console.log(newList);
+		setLanguageList(newList);
+	};
+
 	const handelChange = (e) => {
 		const { dataset, name, value } = e.target;
 		const newList = languageList.map((exp, i) => {
@@ -28,32 +92,54 @@ const Language = () => {
 	};
 
 	useEffect(() => {
-		setResumeInfo({ ...resumeInfo, languages: languageList });
+		// setResumeInfo({ ...resumeInfo, languages: languageList });
+		dispatch(updateInfo({fieldName:"languages",value:languageList}))
 	}, [languageList]);
 
-	useEffect(() => {
-		if (
-			localStorage.getItem("resumeInfo") &&
-			JSON.parse(localStorage.getItem("resumeInfo")).languages.length > 0
-		) {
-			setLanguageList(
-				JSON.parse(localStorage.getItem("resumeInfo")).languages,
-			);
-		}
-	}, []);
+	// useEffect(() => {
+	// 	if (
+	// 		localStorage.getItem("resumeInfo") &&
+	// 		JSON.parse(localStorage.getItem("resumeInfo")).languages.length > 0
+	// 	) {
+	// 		setLanguageList(
+	// 			JSON.parse(localStorage.getItem("resumeInfo")).languages,
+	// 		);
+	// 	}
+	// }, []);
 
 	return (
 		<form className="" onSubmit={handelSubmit}>
 			<div className="space-y-12">
-				<div className=" border-dotted border-[1px] border-gray-500 p-6  rounded-lg" onChange={handelChange}>
+				<div className=" border-dotted border-[1px] border-gray-500 p-6  rounded-lg" onChange={handelChange} onClick={toggleFormView}>
 					<h2 className="text-base font-semibold leading-7 text-gray-900 text-center">
 						Language
 					</h2>
 					{languageList.map((lang, i) => (
-						<div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-							<span className="col-span-full font-semibold">
-								#Language {i + 1}
-							</span>
+						<div className="mt-10">
+								<div className="flex justify-between">
+								<span className="col-span-5 font-semibold">
+									#Project {i + 1}
+								</span>
+
+								<motion.div
+									initial={false}
+									animate={lang.isOpen ? "open" : "close"}
+									variants={rotateButtonVarients}
+									data-key={i}
+									className="col-span-1 place-self-end text-2xl"
+								>
+									<RiArrowUpDownLine className="cursor-pointer" />
+								</motion.div>
+							</div>
+							<AnimatePresence>
+								{lang.isOpen && (
+									<div
+										initial="close"
+										animate="open"
+										exit="close"
+										variants={themeVariant}
+										className="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6"
+									>
 							<div className="sm:col-span-full">
 								<label
 									htmlFor="first-name"
@@ -106,6 +192,8 @@ const Language = () => {
 									</select>
 								</div>
 							</div>
+							</div>)}
+							</AnimatePresence>
 						</div>
 					))}
 				</div>

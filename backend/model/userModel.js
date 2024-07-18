@@ -12,20 +12,18 @@ const userSchema = new mongoose.Schema(
 			type: String,
 			required: [true, "password is required"],
 		},
-		user_info: {
-			firstname: {
-				type: String,
-			},
-			lastname: {
-				type: String,
-			},
-			contact_no: {
-				type: Number,
-			},
-			collge_name: {
-				type: String,
-			},
+
+		fullname: {
+			type: String,
 		},
+	
+		contact_no: {
+			type: Number,
+		},
+		college_name: {
+			type: String,
+		},
+		avtar: { type: String },
 
 		templateCollection: [
 			{

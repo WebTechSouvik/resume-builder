@@ -4,7 +4,7 @@ import { useState, useRef } from "react";
 import { createRoot } from "react-dom/client";
 
 
-const Resume = ({ children }) => {
+const Resume = ({children}) => {
 	const [pages, setPages] = useState([]);
 	const contentRef = useRef();
 	const pngRef=useRef()
@@ -175,6 +175,7 @@ const Resume = ({ children }) => {
 		<div className="relative">
 			
 			{pages.map((page) => page)}
+	
 		</div>
 	);
 };

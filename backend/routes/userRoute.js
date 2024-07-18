@@ -5,10 +5,12 @@ import {
 	registerController,
 	getUserDetailsController,
 	updateUserDetalisController,
-    getAllTemplateFromCollection,
-    addTemplateToCollection,
+	getAllTemplateFromCollection,
+	addTemplateToCollection,
+    uploadImageController,
 } from "../controller/userController.js";
 import authMiddleware from "../middlelware/authMiddleware.js";
+import {upload} from "../middlelware/multerMidleware.js"
 
 const router = Router();
 
@@ -22,11 +24,12 @@ router
 	.route("/details")
 	.get(getUserDetailsController)
 	.patch(updateUserDetalisController);
+router.route("/upload-image").post(upload.single("avtar"), uploadImageController);
 
 router.route("/loggout").post(loggoutController);
 
-router.route("/template").get(getAllTemplateFromCollection)
+router.route("/template").get(getAllTemplateFromCollection);
 
-router.route("/template/:Id").put(addTemplateToCollection)
+router.route("/template/:Id").put(addTemplateToCollection);
 
 export default router;
