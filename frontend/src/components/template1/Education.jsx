@@ -8,7 +8,7 @@ const Education = ({
 }) => {
 	return (
 		<div className="flex flex-col items-start ml-2 mt-3">
-			<p className="text-[14px] text-white">{degree_name}</p>
+			<p className="text-[10px] text-white">{degree_name}</p>
 			<p className="text-[10px] text-white">{college_name}</p>
 			<p className="text-[10px] text-white">
 					<span>{starting_date.split('-')[0]}</span> - <span>{ending_date.split('-')[0]}</span>

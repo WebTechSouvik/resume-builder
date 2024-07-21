@@ -6,13 +6,14 @@ import { useEffect } from "react";
 import { getTemplateThunk } from "../redux/slice/resumeSlice";
 import { GridLoader} from "react-spinners";
 
-const Home = () => {
+const HomePage = () => {
 	const { loading, resumeTemplate, error } = useSelector(
 		(state) => state.resume,
 	);
 	const dispatch = useDispatch();
 
 	useEffect(() => {
+		console.log("hi")
 		dispatch(getTemplateThunk());
 	}, []);
 
@@ -43,7 +44,8 @@ const Home = () => {
 				</section>
 			</ContentWrapper>
 		</main>
+		
 	);
 };
 
-export default Home;
+export default HomePage;

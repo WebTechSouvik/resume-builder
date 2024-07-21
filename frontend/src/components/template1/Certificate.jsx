@@ -4,7 +4,7 @@ const Certificate = (
 	starting_date,
 	ending_date,}
 ) => {
-	return <div className="grid grid-cols-4 mt-5 text-[12px]">
+	return <div className="grid grid-cols-4 mt-5 text-[10px]">
 			<div className="col-span-1 ">
 				<span>{starting_date.split('-')[0]}</span> - <span>{ending_date.split('-')[0]}</span>
 			</div>

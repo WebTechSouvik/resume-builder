@@ -21,10 +21,12 @@ app.use(cookieParser())
 import userRoute from "./routes/userRoute.js"
 import templateRoute from "./routes/templateRoute.js"
 import { errroMiddleware } from "./middlelware/errorMiddleware.js"
+import resumeRoute from "./routes/resumeRoute.js"
 
 
 app.use("/api/v1/user",userRoute)
 app.use("/api/v1/template",templateRoute)
+app.use("/api/v1/resume",resumeRoute)
 
 app.use(errroMiddleware)
 

@@ -21,6 +21,7 @@ const handelLoggin=(data)=>{
 
 useEffect(() => {
 		if (isAthinticate) {
+			if(message)
 			toast.success(message);
 			dispatch(clearMessage());
 			dispatch(userDetalisThunk())

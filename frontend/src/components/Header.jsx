@@ -1,5 +1,5 @@
 import logo from "../assets/logo.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { MdOutlineAccountCircle } from "react-icons/md";
 import { IoDocumentsOutline } from "react-icons/io5";
@@ -19,11 +19,14 @@ const accountVarients = {
 const Header = () => {
 	const { isAthinticate, user } = useSelector((state) => state.user);
 	const [isShow, setIsShow] = useState(false);
+	const navigate=useNavigate()
+
 	return (
 		<header className="w-full h-[75px] flex justify-between items-center px-10 py-3  border-b-[1px] border-gray-300">
-			<div className="h-full">
+			<Link to="/" className="h-full cursor-pointer">
 				<img className="h-full" src={logo} alt="logo" />
-			</div>
+			
+			</Link>
 			<div className="w-[80%] h-full">
 				<input
 					className="w-full h-full border-[1px] font-bold border-gray-300 px-4 bg-[#e5e7eb] rounded-[8px] focus:outline-none"
@@ -54,7 +57,7 @@ const Header = () => {
 						</div>
 						<div className="flex gap-1 text-sm items-center">
 							<IoDocumentsOutline size={20} />
-							<Link to="#">My Document</Link>
+							<Link to="/user-resume">My Document</Link>
 						</div>
 						<div className="flex gap-1 text-sm items-center">
 							<PiSignOut size={20} />

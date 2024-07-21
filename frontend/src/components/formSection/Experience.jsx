@@ -3,8 +3,11 @@ import { IoMdAddCircleOutline } from "react-icons/io";
 import { resumeContext } from "../../context/resumeContext";
 import { RiArrowUpDownLine } from "react-icons/ri";
 import { motion, AnimatePresence } from "framer-motion";
-import { useDispatch } from "react-redux";
-import { updateInfo } from "../../redux/slice/resumeSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { clearError, clearMessage, updateInfo, updateResumeThunk } from "../../redux/slice/resumeSlice";
+import { useParams } from "react-router-dom";
+import {toast} from "sonner"
+import { ClipLoader } from "react-spinners";
 
 const formField = {
 	job_tittle: "",
@@ -51,16 +54,22 @@ const rotateButtonVarients = {
 };
 
 const Experience = () => {
-	const [experienceList, setExperienceList] = useState([ {
-			job_tittle: "",
-			comapny_name: "",
-			joining_date: "",
-			leaving_date: "",
-			job_type: "",
-			description_of_job_role: "",
-			isOpen: true,
-		}]);
+	const { recentResume, resumeInfo,loading,message,error } = useSelector((state) => state.resume);
+	const [experienceList, setExperienceList] = useState(
+		resumeInfo.experince.length > 0 ? resumeInfo.experince : [formField],
+	);
 	const dispatch = useDispatch();
+		const {Id}=useParams()
+
+
+
+
+	useEffect(() => {
+		setExperienceList(resumeInfo.experince);
+	}, [resumeInfo]);
+
+
+
 
 	const addExperience = () => {
 		const formField = {
@@ -73,7 +82,6 @@ const Experience = () => {
 			isOpen: true,
 		};
 
-	
 		const newList = experienceList.map((experience, index) => {
 			if (index === experienceList.length - 1) {
 				return { ...experience, isOpen: false };
@@ -86,8 +94,10 @@ const Experience = () => {
 		setExperienceList(newList);
 	};
 
+
+
 	const toggleFormView = (e) => {
-		if(e.target.nodeName!=="svg")return
+		if (e.target.nodeName !== "svg") return;
 		const { dataset } = e.target.parentElement;
 
 		console.log(dataset.key);
@@ -101,6 +111,8 @@ const Experience = () => {
 		setExperienceList(newList);
 	};
 
+
+
 	const handelChange = (e) => {
 		const { dataset, name, value } = e.target;
 		const newList = experienceList.map((exp, i) => {
@@ -112,25 +124,32 @@ const Experience = () => {
 		setExperienceList(newList);
 	};
 
+
+
 	const handelSubmit = (e) => {
 		e.preventDefault();
-		localStorage.setItem("resumeInfo", JSON.stringify(resumeInfo));
+		dispatch(updateResumeThunk({ Id, resumeInfo }));
 	};
 
+
+
 	useEffect(() => {
-		// setResumeInfo({ ...resumeInfo, experince: experienceList });
-		dispatch(
-			updateInfo({ fieldName: "experince", value: experienceList }),
-		);
+		dispatch(updateInfo({ fieldName: "experince", value: experienceList }));
 	}, [experienceList]);
 
-	// useEffect(() => {
-	// 	if (localStorage.getItem("resumeInfo") && JSON.parse(localStorage.getItem("resumeInfo")).experince.length>0) {
-	// 		setExperienceList(
-	// 			JSON.parse(localStorage.getItem("resumeInfo")).experince,
-	// 		);
-	// 	}
-	// }, []);
+
+	useEffect(() => {
+		if (message) {
+			toast.success(message);
+			dispatch(clearMessage());
+			
+		}
+		if (error) {
+			toast.error(error);
+			dispatch(clearError());
+		}
+	}, [message, error]);
+
 
 	return (
 		<form className="" onSubmit={(e) => handelSubmit(e)}>
@@ -288,9 +307,11 @@ const Experience = () => {
 
 				<button
 					type="submit"
-					className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-				>
-					Save
+					className="rounded-md bg-indigo-600 w-20 h-10 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+				>{
+					loading?<ClipLoader loading={true} size={20}/>:"Save"
+					
+				}
 				</button>
 			</div>
 		</form>

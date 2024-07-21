@@ -1,23 +1,22 @@
 import { useContext, useEffect, useState } from "react";
 import { resumeContext } from "../../context/resumeContext";
-import { useDispatch } from "react-redux";
-import { updateInfo } from "../../redux/slice/resumeSlice";
-
-const formField = {
-	firstname: "",
-	lastname: "",
-	email: "",
-	contact_no: "",
-	education_specalization: "",
-	job_title: "",
-	bio: "",
-	address: "",
-	img_url: "",
-};
+import { useDispatch, useSelector } from "react-redux";
+import { clearError, clearMessage, updateInfo, updateResumeThunk, uploadImageThunk } from "../../redux/slice/resumeSlice";
+import { useParams } from "react-router-dom";
+import {toast} from "sonner"
+import { ClipLoader } from "react-spinners";
+import {toBlob} from 'html-to-image'
 
 const PersonalDetails = () => {
-	const [personalInfo, setPersonalInfo] = useState(formField);
+	const {imgLoading,resumeInfo,loading,message,error } = useSelector((state) => state.resume);
+	const [personalInfo, setPersonalInfo] = useState(null);
 	const dispatch = useDispatch();
+	const {Id}=useParams()
+
+useEffect(()=>{
+	setPersonalInfo(resumeInfo.personal_info)
+
+},[resumeInfo])
 
 	const handelChange = (e) => {
 		const { name, value } = e.target;
@@ -25,28 +24,35 @@ const PersonalDetails = () => {
 		setPersonalInfo({ ...personalInfo, [name]: value });
 	};
 
+	const handelProfileChange=(e)=>{
+		e.stopPropagation()
+		dispatch(uploadImageThunk({resumeId:Id,avtar:e.target.files[0]}))
+	}
+
 	const handelSubmit = (e) => {
 		e.preventDefault();
-		// localStorage.setItem("resumeInfo",JSON.stringify(resumeInfo))
+		dispatch(updateResumeThunk({ Id, resumeInfo }));
 	};
 
 	useEffect(() => {
+		if(personalInfo)
 		dispatch(
 			updateInfo({ fieldName: "personal_info", value: personalInfo }),
 		);
-		// setResumeInfo({ ...resumeInfo, personal_info: personalInfo });
 	}, [personalInfo]);
 
-	useEffect(() => {
-		if (localStorage.getItem("resumeInfo")) {
-			setPersonalInfo(
-				JSON.parse(localStorage.getItem("resumeInfo")).personal_info,
-			);
+		useEffect(() => {
+		if (message) {
+			toast.success(message);
+			dispatch(clearMessage());
 		}
-	}, []);
+		if (error) {
+			toast.error(error);
+			dispatch(clearError());
+		}
+	}, [message, error]);
 
-	return (
-		<form className="" onSubmit={(e) => handelSubmit(e)}>
+	return personalInfo &&	<form className="" onSubmit={(e) => handelSubmit(e)}>
 			<div className="space-y-12">
 				<div className=" shadow-xl border-t-4 border-t-[#00c8aa] border-[1px] border-x-gray-300 border-b-gray-300 p-6  rounded-lg">
 					<h2 className="text-base font-semibold leading-7 text-gray-900 text-center">
@@ -204,9 +210,10 @@ const PersonalDetails = () => {
 											<span>Upload a file</span>
 											<input
 												id="file-upload"
-												name="img_url"
+												name="avtar"
 												type="file"
 												className="sr-only"
+												onChange={handelProfileChange}
 											/>
 										</label>
 										<p className="pl-1">or drag and drop</p>
@@ -224,13 +231,15 @@ const PersonalDetails = () => {
 			<div className="mt-6 flex items-center justify-end gap-x-6">
 				<button
 					type="submit"
-					className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-				>
-					Save
+					className="rounded-md bg-indigo-600 w-20 h-10 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+				>{
+					loading?<ClipLoader loading={true} size={20}/>:"Save"
+					
+				}
 				</button>
 			</div>
 		</form>
-	);
+	;
 };
 
 export default PersonalDetails;

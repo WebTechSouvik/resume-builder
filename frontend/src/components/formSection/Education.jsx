@@ -3,10 +3,14 @@ import { IoMdAddCircleOutline } from "react-icons/io";
 import { resumeContext } from "../../context/resumeContext";
 import { RiArrowUpDownLine } from "react-icons/ri";
 import { motion, AnimatePresence } from "framer-motion";
-import { useDispatch } from "react-redux";
-import { updateInfo } from "../../redux/slice/resumeSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { clearError, clearMessage, updateInfo, updateResumeThunk } from "../../redux/slice/resumeSlice";
+import { useParams } from "react-router-dom";
+import {toast} from "sonner"
+import { ClipLoader } from "react-spinners";
 
-const formFeild = {
+
+const formField = {
 	degree_name: "",
 	college_name: "",
 	starting_date: "",
@@ -50,18 +54,14 @@ const rotateButtonVarients = {
 };
 
 const Education = () => {
-	const [educationList, setEducationList] = useState([{
-		
-			degree_name: "",
-			college_name: "",
-			starting_date: "",
-			ending_date: "",
-			marks_CGPA: "",
-			marks_percentage: "",
-			isOpen: true,
-		}]);
+	const { loading,message,error, resumeInfo } = useSelector((state) => state.resume);
+	const [educationList, setEducationList] = useState(
+		resumeInfo.education.length > 0 ? resumeInfo.education : [formField],
+	);
 
-   const dispatch=useDispatch()
+	const dispatch = useDispatch();
+	const { Id } = useParams();
+
 	const addEducation = () => {
 		const formFeild = {
 			degree_name: "",
@@ -75,11 +75,11 @@ const Education = () => {
 
 		const newList = educationList.map((education, index) => {
 			if (index === educationList.length - 1) {
-				return( { ...education, isOpen:false});
+				return { ...education, isOpen: false };
 			}
 			return education;
 		});
-		console.log(newList)
+		console.log(newList);
 
 		newList.push(formFeild);
 
@@ -87,7 +87,7 @@ const Education = () => {
 	};
 
 	const toggleFormView = (e) => {
-		if(e.target.nodeName!=="svg")return
+		if (e.target.nodeName !== "svg") return;
 		const { dataset } = e.target.parentElement;
 		console.log(dataset.key);
 		const newList = educationList.map((edu, i) => {
@@ -113,24 +113,25 @@ const Education = () => {
 
 	const handelSubmit = (e) => {
 		e.preventDefault();
-		localStorage.setItem("resumeInfo", JSON.stringify(resumeInfo));
+		dispatch(updateResumeThunk({ Id, resumeInfo }));
 	};
 
 	useEffect(() => {
-		// setResumeInfo({ ...resumeInfo, education: educationList });
-		dispatch(updateInfo({fieldName:"education",value:educationList}))
+		
+		dispatch(updateInfo({ fieldName: "education", value: educationList }));
 	}, [educationList]);
 
-	// useEffect(() => {
-	// 	if (
-	// 		localStorage.getItem("resumeInfo") &&
-	// 		JSON.parse(localStorage.getItem("resumeInfo")).education.length > 0
-	// 	) {
-	// 		setEducationList(
-	// 			JSON.parse(localStorage.getItem("resumeInfo")).education,
-	// 		);
-	// 	}
-	// }, []);
+		useEffect(() => {
+		if (message) {
+			toast.success(message);
+			dispatch(clearMessage());
+		
+		}
+		if (error) {
+			toast.error(error);
+			dispatch(clearError());
+		}
+	}, [message, error]);
 
 	return (
 		<form className="" onSubmit={(e) => handelSubmit(e)}>
@@ -264,12 +265,11 @@ const Education = () => {
 					<IoMdAddCircleOutline size={20} />
 					Add more education
 				</button>
-
 				<button
 					type="submit"
-					className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+					className="rounded-md bg-indigo-600 w-20 h-10 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
 				>
-					Save
+					{loading ? <ClipLoader loading={true} size={20} /> : "Save"}
 				</button>
 			</div>
 		</form>

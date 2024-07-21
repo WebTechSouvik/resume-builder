@@ -3,10 +3,18 @@ import { IoMdAddCircleOutline } from "react-icons/io";
 import { resumeContext } from "../../context/resumeContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { RiArrowUpDownLine } from "react-icons/ri";
-import { useDispatch } from "react-redux";
-import { updateInfo } from "../../redux/slice/resumeSlice";
+import { useDispatch, useSelector } from "react-redux";
+import {
+	clearError,
+	clearMessage,
+	updateInfo,
+	updateResumeThunk,
+} from "../../redux/slice/resumeSlice";
+import { useParams } from "react-router-dom";
+import { ClipLoader } from "react-spinners";
+import { toast } from "sonner";
 
-const formFeild = {
+const formField = {
 	certificate_name: "",
 	issuing_org: "",
 	starting_date: "",
@@ -48,14 +56,14 @@ const rotateButtonVarients = {
 };
 
 const Certificate = () => {
-	const [certificateList, setCertificateList] = useState([{
-	certificate_name: "",
-	issuing_org: "",
-	starting_date: "",
-	ending_date: "",
-	isOpen: true,
-}]);
- const dispatch=useDispatch()
+	const { loading,message,error, resumeInfo } = useSelector((state) => state.resume);
+	const [certificateList, setCertificateList] = useState(
+		resumeInfo.certificates.length > 0
+			? resumeInfo.certificates
+			: [formField],
+	);
+	const dispatch = useDispatch();
+	const { Id } = useParams();
 
 	const addCertificate = () => {
 		const formFeild = {
@@ -67,7 +75,7 @@ const Certificate = () => {
 		};
 		const newList = certificateList.map((certificate, index) => {
 			if (index === certificateList.length - 1) {
-				return( { ...certificate, isOpen:false});
+				return { ...certificate, isOpen: false };
 			}
 			return certificate;
 		});
@@ -78,7 +86,7 @@ const Certificate = () => {
 	};
 
 	const toggleFormView = (e) => {
-		if(e.target.nodeName!=="svg")return
+		if (e.target.nodeName !== "svg") return;
 		const { dataset } = e.target.parentElement;
 		console.log(dataset.key);
 		const newList = certificateList.map((certificate, i) => {
@@ -104,26 +112,25 @@ const Certificate = () => {
 
 	const handelSubmit = (e) => {
 		e.preventDefault();
-		// localStorage.setItem("resumeInfo", JSON.stringify(resumeInfo));
-	
+		dispatch(updateResumeThunk({ Id, resumeInfo }));
 	};
 
 	useEffect(() => {
-		// setResumeInfo({ ...resumeInfo, certificates: certificateList });
-		dispatch(updateInfo({fieldName:"certificates",value:certificateList}))
+		dispatch(
+			updateInfo({ fieldName: "certificates", value: certificateList }),
+		);
 	}, [certificateList]);
 
-	// useEffect(() => {
-	// 	if (
-	// 		localStorage.getItem("resumeInfo") &&
-	// 		JSON.parse(localStorage.getItem("resumeInfo")).certificates.length >
-	// 			0
-	// 	) {
-	// 		setCertificateList(
-	// 			JSON.parse(localStorage.getItem("resumeInfo")).certificates,
-	// 		);
-	// 	}
-	// }, []);
+	useEffect(() => {
+		if (message) {
+			toast.success(message);
+			dispatch(clearMessage());
+		}
+		if (error) {
+			toast.error(error);
+			dispatch(clearError());
+		}
+	}, [message, error]);
 
 	return (
 		<form className="" onSubmit={handelSubmit}>
@@ -264,9 +271,9 @@ const Certificate = () => {
 
 				<button
 					type="submit"
-					className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+					className="rounded-md bg-indigo-600 w-20 h-10 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
 				>
-					Save
+					{loading ? <ClipLoader loading={true} size={20} /> : "Save"}
 				</button>
 			</div>
 		</form>

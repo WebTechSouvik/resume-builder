@@ -12,21 +12,27 @@ import Project from "../../components/template1/Project";
 import Achievement from "../../components/template1/Achievement";
 import Certificate from "../../components/template1/Certificate";
 import Language from "../../components/template1/Language";
+import { ClipLoader } from "react-spinners";
 
-const ResumeContent = () => {
-	const {resumeInfo}=useSelector(state=>state.resume)
-
+const ResumeContent = (resumeInfo,imgLoading) => {
+	
 
 	return (
 		<>
-	
-			<div className="col-span-2 min-h-full bg-gray-500">
-				<div className="w-full h-[230px] ">
+		
+			<div className={`col-span-2 min-h-full ${resumeInfo.themeColour?resumeInfo.themeColour:"bg-gray-500"}`}>
+				<div className="w-full h-[220px] relative">
+					{imgLoading && (
+						<div className="flex justify-center items-center absolute w-full h-full bg-white/40 top-0 left-0">
+							<ClipLoader loading={imgLoading} size="40" />
+						</div>
+					)}
+
 					<img
-						className="w-full h-full"
+						className="w-full h-full object-cover"
 						src={
-							resumeInfo.personal_info.img_url
-								? resumeInfo.personal_info.img_url
+							resumeInfo?.personal_info?.avtar
+								? resumeInfo.personal_info.avtar
 								: photo
 						}
 						alt=""
@@ -35,7 +41,7 @@ const ResumeContent = () => {
 
 				{resumeInfo.education.length > 0 && (
 					<div className="pl-7 mt-7">
-						<p className="flex text-[15px] font-bold text-white border-b-[1px] border-b-yellow-400 pb-2">
+						<p className="flex text-[12px] font-bold text-white border-b-[1px] border-b-yellow-400 pb-2">
 							EDUCATION
 						</p>
 						{resumeInfo.education.map((edu) => (
@@ -44,7 +50,7 @@ const ResumeContent = () => {
 					</div>
 				)}
 
-				{resumeInfo.reference.length > 0 && (
+				{/*{resumeInfo.reference.length > 0 && (
 					<div className="pl-7 mt-7">
 						<p className="text-[15px] font-bold text-white border-b-[1px] border-b-yellow-400 pb-2 flex">
 							REFERENCE
@@ -52,7 +58,7 @@ const ResumeContent = () => {
 						<Reference />
 						<Reference />
 					</div>
-				)}
+				)}*/}
 				{resumeInfo.languages.length > 0 && (
 					<div className="pl-7 mt-7">
 						<p className="flex text-[15px] font-bold text-white border-b-[1px] border-b-yellow-400 pb-2">
@@ -86,32 +92,32 @@ const ResumeContent = () => {
 			</div>
 			<div className="max-h-full col-span-4  pb-3">
 				<div className="w-full h-[100px] bg-yellow-400 mt-14 flex flex-col justify-center items-start pl-8 gap-1">
-					<h1 className="text-2xl fomt-bold">
+					<h1 className="text-xl fomt-bold">
 						<span className="uppercase mr-1">
-							{resumeInfo.personal_info.firstname}
+							{resumeInfo?.personal_info?.firstname}
 						</span>
 						<span className="uppercase">
 							{resumeInfo.personal_info.lastname}
 						</span>
 					</h1>
 
-					<p className="text-sm">
-						{resumeInfo.personal_info.job_title
+					<p className="text-[10px]">
+						{resumeInfo?.personal_info?.job_title
 							? resumeInfo.personal_info.job_title
 							: resumeInfo.personal_info.education_specalization}
 					</p>
 				</div>
 
 				<div className="mt-7 px-10">
-					<h1 className="w-full font-bold border-b-[1px] border-black pb-2">
+					<h1 className="w-full font-bold text-[12px] border-b-[1px] border-black pb-2">
 						ABOUT ME
 					</h1>
-					<p className="text-[12px] mt-3 break-words">
+					<p className="text-[10px] mt-3 break-words">
 						{resumeInfo.personal_info.bio}
 					</p>
 				</div>
 				<div className="mt-7 px-10">
-					<h1 className="w-full font-bold border-b-[1px] border-black pb-2">
+					<h1 className="w-full font-bold text-[12px] border-b-[1px] border-black pb-2">
 						WORK EXPERIENCE
 					</h1>
 					{resumeInfo.experince.length > 0 &&
@@ -120,10 +126,10 @@ const ResumeContent = () => {
 						))}
 				</div>
 				<div className="mt-7 px-10">
-					<h1 className="w-full font-bold border-b-[1px] border-black pb-2">
+					<h1 className="w-full font-bold text-[12px]  border-b-[1px] border-black pb-2">
 						SOFTWARE SKILL
 					</h1>
-					<div className="mt-5 flex flex-wrap gap-y-5 gap-x-10 ml-[132px]">
+					<div className="mt-5 flex flex-wrap gap-y-5 gap-x-10 ml-[93px]">
 						{resumeInfo.skills.length > 0 &&
 							resumeInfo.skills.map((skill) => (
 								<Skill {...skill} />
@@ -132,7 +138,7 @@ const ResumeContent = () => {
 				</div>
 				{resumeInfo.project.length > 0 && (
 					<div className="mt-7 px-10">
-						<h1 className="w-full font-bold border-b-[1px] border-black pb-2">
+						<h1 className="w-full font-bold text-[12px]  border-b-[1px] border-black pb-2">
 							PROJECT
 						</h1>
 
@@ -146,7 +152,7 @@ const ResumeContent = () => {
 				)}
 				{resumeInfo.certificates.length > 0 && (
 					<div className="mt-7 px-10">
-						<h1 className="w-full font-bold border-b-[1px] border-black pb-2">
+						<h1 className="w-full font-bold text-[12px]  border-b-[1px] border-black pb-2">
 							CERTIFICATES
 						</h1>
 

@@ -12,7 +12,7 @@ div[size="A4"][layout="portrait"] {
 	height: 29.7cm;
 	/* width: 29.7cm; */
 	/* height: 21cm; */
-	transform: scale(0.7);
+/*	transform: scale(0.7);*/
 	position: absolute;
 
 	left: -46px;

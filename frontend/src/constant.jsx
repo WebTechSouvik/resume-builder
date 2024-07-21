@@ -62,7 +62,7 @@ export const resumeInfoObj = {
     job_title: "",
     bio: "",
     address: "",
-    img_url: "",
+    avtar: "",
   },
   scocial_media_link: {
     linkdin: "",

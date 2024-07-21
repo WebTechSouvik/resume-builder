@@ -5,8 +5,11 @@ import "@smastrom/react-rating/style.css";
 import { resumeContext } from "../../context/resumeContext";
 import { RiArrowUpDownLine } from "react-icons/ri";
 import { motion, AnimatePresence } from "framer-motion";
-import { useDispatch } from "react-redux";
-import { updateInfo } from "../../redux/slice/resumeSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { clearError, clearMessage, updateInfo, updateResumeThunk } from "../../redux/slice/resumeSlice";
+import { useParams } from "react-router-dom";
+import {toast} from "sonner"
+import { ClipLoader } from "react-spinners";
 
 const themeVariant = {
 	close: {
@@ -43,15 +46,18 @@ const rotateButtonVarients = {
 };
 
 const Skill = () => {
-	const [skillList, setSkillList] = useState([
-		{ skill_name: "", rating: "", isOpen: true },
-	]);
+	const {resumeInfo,loading,message,error } = useSelector((state) => state.resume);
+
+	const [skillList, setSkillList] = useState(
+		resumeInfo.skills.length > 0
+			? resumeInfo.skills
+			: [{ skill_name: "", rating: "", isOpen: true }],
+	);
 
 	const dispatch = useDispatch();
+	const { Id } = useParams();
 
 	const addSkill = () => {
-	
-
 		const newList = skillList.map((skill, index) => {
 			if (index === skillList.length - 1) {
 				return { ...skill, isOpen: false };
@@ -103,21 +109,24 @@ const Skill = () => {
 
 	const handelSubmit = (e) => {
 		e.preventDefault();
-		localStorage.setItem("resumeInfo", JSON.stringify(resumeInfo));
+		dispatch(updateResumeThunk({ Id, resumeInfo }));
 	};
 
 	useEffect(() => {
 		dispatch(updateInfo({ fieldName: "skills", value: skillList }));
 	}, [skillList]);
 
-	// useEffect(() => {
-	// 	if (
-	// 		localStorage.getItem("resumeInfo") &&
-	// 		JSON.parse(localStorage.getItem("resumeInfo")).skills.length > 0
-	// 	) {
-	// 		setSkillList(JSON.parse(localStorage.getItem("resumeInfo")).skills);
-	// 	}
-	// }, []);
+	useEffect(() => {
+		if (message) {
+			toast.success(message);
+			dispatch(clearMessage());
+			
+		}
+		if (error) {
+			toast.error(error);
+			dispatch(clearError());
+		}
+	}, [message, error]);
 
 	return (
 		<form className="" onSubmit={(e) => handelSubmit(e)}>
@@ -184,7 +193,7 @@ const Skill = () => {
 												style={{ maxWidth: 160 }}
 												value={
 													skill.rating
-														? skill.rating
+														? parseInt(skill.rating) 
 														: 0
 												}
 												onChange={(val) =>
@@ -212,9 +221,11 @@ const Skill = () => {
 
 				<button
 					type="submit"
-					className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-				>
-					Save
+					className="rounded-md bg-indigo-600 w-20 h-10 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+				>{
+					loading?<ClipLoader loading={true} size={20}/>:"Save"
+					
+				}
 				</button>
 			</div>
 		</form>

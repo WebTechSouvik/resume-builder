@@ -10,6 +10,9 @@ const resumeSchema = new mongoose.Schema(
 			type: mongoose.Schema.Types.ObjectId,
 			ref: "Template",
 		},
+		resume_img_url:{
+			type:String
+		},
 		resume_info: {
 			personal_info: {
 				firstname: {
@@ -36,7 +39,7 @@ const resumeSchema = new mongoose.Schema(
 				address: {
 					type: String,
 				},
-				img_url: {
+				avtar: {
 					type: String,
 				},
 			},
@@ -162,6 +165,7 @@ const resumeSchema = new mongoose.Schema(
 				},
 			],
 			achievement: { type: String },
+			themeColour: { type: String },
 			languages: [
 				{
 					language_name: {

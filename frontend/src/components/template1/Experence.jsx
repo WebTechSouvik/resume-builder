@@ -7,7 +7,7 @@ const Experence = ({
 	description_of_job_role,
 }) => {
 	return (
-		<div className="grid grid-cols-4 mt-5 text-[12px]">
+		<div className="grid grid-cols-4 mt-5 text-[10px]">
 			<div className="col-span-1 ">
 				<span>{joining_date.split('-')[0]}</span> - <span>{leaving_date.split('-')[0]}</span>
 			</div>

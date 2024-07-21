@@ -4,7 +4,7 @@ import parse from 'html-react-parser';
 const Project = ({project_name,starting_date,ending_date,description}) => {
 
 	return (
-		<div className="grid grid-cols-4 mt-5 text-[12px]">
+		<div className="grid grid-cols-4 mt-5 text-[10px]">
 			<div className="col-span-1 ">
 				<span>{starting_date?.split("-")[0]}</span> -
 				<span>{ending_date.split("-")[0]}</span>

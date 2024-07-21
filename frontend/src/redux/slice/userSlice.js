@@ -6,8 +6,7 @@ import {
   userLoggin,
   userRegister,
 } from "../../utils/userApi";
-import { FaLess } from "react-icons/fa6";
-import { act } from "react";
+
 
 export const userRegisterThunk = createAsyncThunk(
   "userRegisterThunk",
