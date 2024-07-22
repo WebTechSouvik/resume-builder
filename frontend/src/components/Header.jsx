@@ -1,11 +1,13 @@
 import logo from "../assets/logo.png";
 import { Link, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { MdOutlineAccountCircle } from "react-icons/md";
 import { IoDocumentsOutline } from "react-icons/io5";
 import { PiSignOut } from "react-icons/pi";
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { userLogoutThunk } from "../redux/slice/userSlice";
+import {toast} from "sonner"
 
 const accountVarients = {
 	open: {
@@ -20,9 +22,18 @@ const Header = () => {
 	const { isAthinticate, user } = useSelector((state) => state.user);
 	const [isShow, setIsShow] = useState(false);
 	const navigate=useNavigate()
+	const dispatch=useDispatch()
+
+	const handelLogout=()=>{
+		dispatch(userLogoutThunk())
+		navigate("/",{replace:true})
+		toast.success("Logout successful")
+
+
+	}
 
 	return (
-		<header className="w-full h-[75px] flex justify-between items-center px-10 py-3  border-b-[1px] border-gray-300">
+		<header className="w-full h-[75px] flex justify-between items-center px-10 py-3  border-b-2 border-white">
 			<Link to="/" className="h-full cursor-pointer">
 				<img className="h-full" src={logo} alt="logo" />
 			
@@ -61,7 +72,7 @@ const Header = () => {
 						</div>
 						<div className="flex gap-1 text-sm items-center">
 							<PiSignOut size={20} />
-							<Link to="#">Sign out</Link>
+							<div onClick={handelLogout}>Sign out</div>
 						</div>
 					</motion.div>
 				</div>

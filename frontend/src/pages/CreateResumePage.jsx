@@ -109,7 +109,7 @@ function CreateResumePage() {
 		<>
 			<GridLoadercmp loading={resumeLoading} />
 			{resumeInfo && (
-				<main className="max-w-screen grid grid-cols-2 pt-4">
+				<main className="max-w-screen grid grid-cols-2 pt-4 mb-6">
 					<section className="px-8 relative">
 						<div className="flex w-full justify-between mb-10">
 							<button

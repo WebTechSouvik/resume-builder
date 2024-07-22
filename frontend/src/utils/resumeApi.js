@@ -3,8 +3,17 @@ import { RiExpandUpDownFill } from "react-icons/ri";
 
 axios.defaults.withCredentials = true;
 
-export const getTemplate = async () => {
-	const { data } = await axios.get("http://localhost:8000/api/v1/template");
+export const getTemplate = async (userId) => {
+	let url
+	console.log(userId)
+	if(userId){
+		url=`http://localhost:8000/api/v1/template?userId=${userId}`
+
+	}
+	else{
+		url="http://localhost:8000/api/v1/template"
+	}
+	const { data } = await axios.get(url);
 	return data;
 };
 

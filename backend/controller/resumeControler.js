@@ -125,7 +125,7 @@ export const getUserResumeController = AsyncHandeler(async (req, res) => {
 	const userResume = await Resume.find({
 		owner: id,
 		resume_img_url: { $exists: true },
-	}).select("resume_img_url");
+	}).select(["resume_img_url","createdAt","updatedAt"]);
 
 	if (userResume.length == 0) {
 		res.status(200).json(new ApiResponse("no resume found"));

@@ -42,9 +42,9 @@ const resumeInfoObj = {
 
 export const getTemplateThunk = createAsyncThunk(
 	"getTemplateThunk",
-	async () => {
+	async (userId) => {
 		try {
-			return await getTemplate();
+			return await getTemplate(userId);
 		} catch (err) {
 			throw new Error(err.response.data.message);
 		}

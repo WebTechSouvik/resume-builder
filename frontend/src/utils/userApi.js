@@ -31,6 +31,17 @@ export const userLoggin = async (userInfo) => {
 	return data;
 };
 
+export const useLogout = async () => {
+	const { data } = await axios.post(
+		"http://localhost:8000/api/v1/user/loggout",
+		null,
+		{
+			withCredentials: true,
+		},
+	);
+	return data;
+};
+
 export const userDetails = async () => {
 	const configs = {
 		withCredentials: true,

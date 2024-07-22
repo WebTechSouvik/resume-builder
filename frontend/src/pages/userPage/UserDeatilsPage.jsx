@@ -17,6 +17,7 @@ import {
 } from "../../redux/slice/userSlice";
 import { toast } from "sonner";
 import { GridLoader, ClipLoader } from "react-spinners";
+import photo from "../../assets/photo.jpeg"
 
 const inputVariant = {
 	hidden: {
@@ -213,7 +214,7 @@ const UserDeatlisPage = () => {
 							)}
 
 							<img
-								src={user.avtar}
+								src={user.avtar?user.avtar:photo}
 								alt="avtar"
 								className="h-full w-full rounded-[50%] object-cover"
 							/>
@@ -255,6 +256,7 @@ const UserDeatlisPage = () => {
 											animate="open"
 											variants={buttonVarients}
 											className=" text-sm font-bold bg-white py-1 px-3 rounded-3xl"
+											onClick={()=>setisEdit(false)}
 										>
 											Cancel
 										</motion.button>

@@ -1,33 +1,37 @@
-import Template1 from "../assets/Template1.jpg";
-import { FaRegHeart } from "react-icons/fa";
+import { IoIosHeart } from "react-icons/io";
 import { AiOutlineFolderAdd } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
-import { clearRecentResume, createResumeThunk } from "../redux/slice/resumeSlice";
+import {
+	clearRecentResume,
+	createResumeThunk,
+} from "../redux/slice/resumeSlice";
 import { useNavigate } from "react-router-dom";
 import { resumeInfoObj } from "../constant";
 import { useEffect } from "react";
+import { motion } from "framer-motion";
 
-const Template = ({ _id, name, image_url }) => {
+const Template = ({ _id, name, image_url, is_like,like_no }) => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const { recentResume, loading } = useSelector((state) => state.resume);
-	const {isAthinticate}=useSelector(state=>state.user)
+	const { isAthinticate } = useSelector((state) => state.user);
 
 	const resumeCreate = () => {
-		if(isAthinticate)
-		dispatch(
-			createResumeThunk({ templateId: _id, resumeInfo: resumeInfoObj }),
-		);
-	else{
-		navigate("/loggin")
-	}
-		
+		if (isAthinticate)
+			dispatch(
+				createResumeThunk({
+					templateId: _id,
+					resumeInfo: resumeInfoObj,
+				}),
+			);
+		else {
+			navigate("/loggin");
+		}
 	};
 
 	useEffect(() => {
-		if (recentResume)
-			navigate(`/createresume/${recentResume}`);
-		dispatch(clearRecentResume())
+		if (recentResume) navigate(`/createresume/${recentResume}`);
+		dispatch(clearRecentResume());
 	}, [recentResume]);
 
 	return (
@@ -47,8 +51,17 @@ const Template = ({ _id, name, image_url }) => {
 						<div className="relative hover-target bg-white px-2 pt-1 rounded-md hidden group-hover/tooltip:block tootip-arrow">
 							Add To Favourite
 						</div>
-						<div className="h-8 w-8 bg-white flex justify-center items-center rounded-md">
-							<FaRegHeart />
+						<div
+							// whileTap={{ scale: 1.4, color: "red" }}
+							// transition={{duration:0.1}}
+							className="h-8 w-8 bg-white flex justify-center items-center rounded-md"
+						>
+							<motion.span
+								whileTap={{ scale: 2, color: "red" }}
+								transition={{ duration: 0.3 }}
+							>
+								<IoIosHeart color={is_like ? "red" : ""} />
+							</motion.span>
 						</div>
 					</div>
 				</div>
@@ -58,6 +71,7 @@ const Template = ({ _id, name, image_url }) => {
 				>
 					Create Resume
 				</div>
+				<div className="text-white absolute bottom-2 left-2 italic"><span>Likes: </span><span>{like_no}</span></div>
 			</div>
 		</div>
 	);

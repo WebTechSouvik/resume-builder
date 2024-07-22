@@ -14,13 +14,19 @@ const RegisterPage = () => {
 	const formRef = useRef(null);
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const { loading, message, error } = useSelector((state) => state.user);
+	const { loading, message, error,isAthinticate } = useSelector((state) => state.user);
 	const { handleSubmit, register, formState } = useForm();
 	const { errors } = formState;
 
 	const handleRegister = (data) => {
 		dispatch(userRegisterThunk(data));
 	};
+
+	useEffect(() => {
+		if (isAthinticate) {
+			navigate("/");
+		}
+	}, [isAthinticate]);
 
 	useEffect(() => {
 		if (message) {
@@ -145,7 +151,7 @@ const RegisterPage = () => {
 				</form>
 
 				<p className="mt-10 text-center text-sm text-gray-500">
-					Already have a account?{" "}
+					Already have a account?
 					<Link
 						to="/loggin"
 						className="font-bold leading-6 text-[#1f262e] hover:text-[#00967e]"

@@ -5,6 +5,7 @@ import {
   userDetails,
   userLoggin,
   userRegister,
+  useLogout
 } from "../../utils/userApi";
 
 
@@ -25,6 +26,17 @@ export const userLogginThunk = createAsyncThunk(
   async (userInfo) => {
     try {
       return await userLoggin(userInfo);
+    } catch (err) {
+      throw new Error(err.response.data.message);
+    }
+  },
+);
+
+export const userLogoutThunk = createAsyncThunk(
+  "userLogoutThunk",
+  async () => {
+    try {
+      return await useLogout();
     } catch (err) {
       throw new Error(err.response.data.message);
     }
@@ -146,7 +158,21 @@ const userSlice = createSlice({
       .addCase(updateProfilePictureThunk.rejected, (state, action) => {
         state.imageLoading = false;
         state.error = action.error.message;
-      });
+      })
+       .addCase(userLogoutThunk.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(userLogoutThunk.fulfilled, (state, action) => {
+        state.loading = false;
+        state.isAthinticate=false
+        state.user=null
+     
+       
+      })
+      .addCase(userLogoutThunk.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
   },
 });
 

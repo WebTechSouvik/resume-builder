@@ -18,7 +18,6 @@ import { Toaster } from "sonner";
 import Protected from "./components/Protected.jsx";
 import UserResumePage from "./pages/userPage/UserResumePage.jsx";
 
-
 function App() {
   const dispatch = useDispatch();
 
@@ -38,13 +37,13 @@ function App() {
       <BrowserRouter>
         <Header />
         <Routes>
-          <Route path="/" element={<HomePage/>} />
+          <Route path="/" element={<HomePage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/loggin" element={<LogginPage />} />
           <Route element={<Protected />}>
             <Route path="/user-details" element={<UserDeatlisPage />} />
-             <Route path="/user-resume" element={<UserResumePage />} />
-            <Route path="/createresume/:Id" element={<CreateResumePage/>}>
+            <Route path="/user-resume" element={<UserResumePage />} />
+            <Route path="/createresume/:Id" element={<CreateResumePage />}>
               <Route path="personal-detalis" element={<PersonalDetails />} />
               <Route path="experience" element={<Experience />} />
               <Route path="education" element={<Education />} />
@@ -55,7 +54,15 @@ function App() {
         </Routes>
         <Footer />
       </BrowserRouter>
-    <Toaster richColors />
+      <Toaster
+        richColors
+        toastOptions={{
+          style: {
+            height: "50px",
+            paddingLeft: "10px",
+          },
+        }}
+      />
     </div>
   );
 }
